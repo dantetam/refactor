@@ -45,7 +45,7 @@ public class RenderSystem extends BaseSystem {
 			nc = 0;
 			nr++;
 		}
-		float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,40)/40F;
+		float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,20F)/20F;
 		for (int i = 0; i < main.grid.organisms.size(); i++)
 		{
 			Organism org = main.grid.organisms.get(i);

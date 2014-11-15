@@ -40,6 +40,57 @@ public class Grid {
 		}
 	}
 
+	public boolean valid(Organism a, int r, int c)
+	{
+		for (int i = 0; i < organisms.size(); i++)
+		{
+			Organism b = organisms.get(i);
+			if (!a.equals(b))
+			{
+				if (intersectInFuture(a,b,r,c))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	//Checks to see if a hypothetical move by organism a would intersect organism b's territory
+	private boolean intersectInFuture(Organism a, Organism b, int r, int c)
+	{
+		ArrayList<Tile> aFuture = new ArrayList<Tile>();
+		ArrayList<Tile> bFuture = new ArrayList<Tile>();
+		for (int i = 0; i < a.units.size(); i++)
+		{
+			Entity u = a.units.get(i);
+			aFuture.add(getTile(r+u.rDis,c+u.cDis));
+		}
+		for (int i = 0; i < b.units.size(); i++)
+		{
+			Entity u = a.units.get(i);
+			aFuture.add(getTile(b.center.row+u.rDis,b.center.col+u.cDis));
+		}
+		return intersect(aFuture, bFuture);
+	}
+	
+	//Checks to see if two lists have an intersection
+	private boolean intersect(ArrayList<Tile> a, ArrayList<Tile> b)
+	{
+		for (int i = a.size() - 1; i >= 0; i--)
+		{
+			for (int j = 0; j < b.size(); j++)
+			{
+				if (a.get(i).equals(b.get(j)))
+				{
+					return true;
+				}
+			}
+			//a.remove(i);
+		}
+		return false;
+	}
+	
 	public Tile getTile(int r, int c)
 	{
 		if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length)

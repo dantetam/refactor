@@ -49,9 +49,16 @@ public class OrganismSystem extends BaseSystem {
 				if (org.queueTiles.size() > 0)
 				{
 					Tile t = org.queueTiles.get(org.queueTiles.size()-1);
-					main.grid.moveCenterTo(org, t.row, t.col);
-					org.queueTiles.remove(org.queueTiles.size()-1);
-					org.action--;
+					if (main.grid.valid(org, t.row, t.col))
+					{
+						main.grid.moveCenterTo(org, t.row, t.col);
+						org.queueTiles.remove(org.queueTiles.size()-1);
+						org.action--;
+					}
+					else
+					{
+						System.out.println("Attack");
+					}
 					continue;
 				}
 			}

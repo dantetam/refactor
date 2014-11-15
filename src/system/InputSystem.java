@@ -21,7 +21,7 @@ public class InputSystem extends BaseSystem {
 			char key = queue.remove(0);
 			if (key == (char)32)
 			{
-				System.out.println("Space");
+				//System.out.println("Space");
 				main.organismSystem.nextTurn = true;
 			}
 			else if (key == 'm')
