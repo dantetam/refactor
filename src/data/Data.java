@@ -16,7 +16,7 @@ public class Data {
 		Organism temp;
 		
 		temp = new Organism("Test");
-		temp.addUnit(0, 0, 15, 4, 2, 0);
+		temp.addUnit(0, 0, 15, 4, 2, 0).range(5);
 		temp.addUnit(0, 1, 10, 2, 2, 0);
 		temp.addUnit(0, -1, 10, 2, 2, 0);
 		temp.addUnit(1, 0, 10, 2, 2, 0);

@@ -32,6 +32,15 @@ public class RenderSystem extends BaseSystem {
 				Tile t = main.grid.getTile(r,c);
 				if (t == null) continue;
 				main.stroke(255);
+				main.strokeWeight(1);
+				if (main.menuSystem.highlighted != null)
+				{
+					if (main.menuSystem.highlighted.equals(t))
+					{
+						main.stroke(0,0,255);
+						main.strokeWeight(5);
+					}
+				}
 				switch (t.biome)
 				{
 				case -1: main.fill(150,225,255); main.noStroke(); break;

@@ -19,13 +19,14 @@ public class LevelLoader {
 	
 	public int[][] newLevel(int len)
 	{
+		len = 128;
 		double[][] temp = DiamondSquare.makeTable(50,50,50,50,len+1);
 		DiamondSquare ds = new DiamondSquare(temp);
 
 		double[][] landSea = ds.generate(new double[]{0, 0, len, 15, 0.6},theSeed);
 		double cutoff = DiamondSquare.seaLevel(landSea, 60, 0.6);
 		//int[][] biomes = new int[landSea.length][landSea[0].length];
-		double[][] biomes = new PerlinNoise(theSeed).generate(new double[]{len,len,5.5,8,1,0.8,6,len});
+		double[][] biomes = new PerlinNoise(theSeed).generate(new double[]{len/4,len/4,5.5,8,1,0.8,6,len});
 		//double[][] 
 		int[][] t = new int[biomes.length][biomes[0].length];
 		for (int r = 0; r < biomes.length; r++)

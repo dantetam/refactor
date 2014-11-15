@@ -67,6 +67,23 @@ public class OrganismSystem extends BaseSystem {
 					Entity[] en = main.grid.valid(org, t.row, t.col); 
 					if (en == null)
 					{
+						boolean shot = false;
+						for (int i = 0; i < org.units.size(); i++)
+						{
+							if (org.action < 2) break;
+							Entity range = org.units.get(i);
+							if (range.rangedStr > 0)
+							{
+								Entity target = randomTarget(range);
+								if (target != null)
+								{
+									
+									shot = true;
+									org.action--;
+									break;
+								}
+							}
+						}
 						main.grid.moveCenterTo(org, t.row, t.col);
 						org.queueTiles.remove(org.queueTiles.size()-1);
 						org.action--;
@@ -132,6 +149,23 @@ public class OrganismSystem extends BaseSystem {
 		}
 	}
 
+	public Entity randomTarget(Entity a)
+	{
+		ArrayList<Entity> candidates = new ArrayList<Entity>();
+		for (int r = a.trueRow() - a.range; r <= a.trueRow() + a.range; r++)
+		{
+			for (int c = a.trueCol() - a.range; c <= a.trueCol() + a.range; c++)
+			{
+				Entity candidate = main.grid.findEntity(r, c);
+				if (!candidate.owner.equals(a.owner))
+				{
+					candidates.add(candidate);
+				}
+			}
+		}
+		return candidates.get((int)(Math.random()*candidates.size()));
+	}
+	
 	public ArrayList<Tile> pathFindTo(Organism org, int r, int c)
 	{
 		org.queueTiles = pathfinder.findAdjustedPath(org, org.center.row, org.center.col, r, c);

@@ -38,9 +38,11 @@ public class Organism {
 		action = maxAction;
 	}
 	
-	public void addUnit(int rDis, int cDis, int h, int o, int d, int r)
+	public Entity addUnit(int rDis, int cDis, int h, int o, int d, int r)
 	{
-		units.add(new Entity(this,rDis,cDis,h,o,d,r));
+		Entity temp = new Entity(this,rDis,cDis,h,o,d,r);
+		units.add(temp);
+		return temp;
 	}
 	
 	public void destroy(Entity en)

@@ -35,7 +35,7 @@ public class Grid {
 		moveCenterTo(plr, t.row, t.col);
 		plr.color(255,0,0);
 
-		for (int i = 1; i < 15; i++)
+		for (int i = 1; i < 50; i++)
 		{
 			Organism org = Data.getOrganism("Test");
 			organisms.add(org);

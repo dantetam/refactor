@@ -8,7 +8,7 @@ public class Entity {
 	public Organism owner;
 	
 	public float health, maxHealth; public boolean deathFlag = false;
-	public float offensiveStr, defensiveStr, rangedStr;
+	public float offensiveStr, defensiveStr, rangedStr; public int range;
 	
 	public long id;
 	
@@ -20,6 +20,9 @@ public class Entity {
 		health = h; maxHealth = h;
 		offensiveStr = o; defensiveStr = d; rangedStr = ranged;
 	}
+	
+	public int trueRow() {return rDis + owner.center.row;}
+	public int trueCol() {return cDis + owner.center.col;}
 	
 	public boolean sameLocation(Entity en)
 	{
@@ -36,5 +39,7 @@ public class Entity {
 	{
 		return id == en.id;
 	}
+	
+	public Entity range(int n) {range = n; return this;}
 	
 }

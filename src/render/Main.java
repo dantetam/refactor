@@ -14,9 +14,10 @@ public class Main extends PApplet {
 	public LevelLoader levelLoader;
 	
 	public ArrayList<BaseSystem> systems = new ArrayList<BaseSystem>();
-	public RenderSystem renderSystem = new RenderSystem(this);
 	public OrganismSystem organismSystem = new OrganismSystem(this);
 	public InputSystem inputSystem = new InputSystem(this);
+	public RenderSystem renderSystem = new RenderSystem(this);
+	public MenuSystem menuSystem = new MenuSystem(this);
 	
 	public int frameLastUpdate = 0;
 	
@@ -26,17 +27,21 @@ public class Main extends PApplet {
 		Data.init();
 		
 		levelLoader = new LevelLoader(870L);
-		grid = new Grid(levelLoader.newLevel(32));
+		grid = new Grid(levelLoader.newLevel(128));
 		
 		systems.add(organismSystem);
 		systems.add(inputSystem);
 		systems.add(renderSystem);
+		systems.add(menuSystem);
 		
 		organismSystem.addGrid(grid);
+		
+		textSize(16);
 	}
 	
 	public void draw()
 	{
+		inputSystem.mousePass(mouseX, mouseY);
 		for (int i = 0; i < systems.size(); i++)
 		{
 			systems.get(i).tick();
