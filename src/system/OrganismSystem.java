@@ -14,13 +14,13 @@ public class OrganismSystem extends BaseSystem {
 
 	public boolean nextTurn = false;
 	public Organism[][] records;
-	public HashMap<Entity,Integer> respHealth;
+	public HashMap<Entity,Float> respHealth;
 	public Pathfinder pathfinder;
 
 	public OrganismSystem(Main m)
 	{
 		super(m);
-		respHealth = new HashMap<Entity,Integer>();
+		respHealth = new HashMap<Entity,Float>();
 	}
 
 	public void tick()

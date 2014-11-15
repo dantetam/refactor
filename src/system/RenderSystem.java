@@ -51,7 +51,7 @@ public class RenderSystem extends BaseSystem {
 			nr++;
 		}
 		float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,debounce)/debounce;
-		for (int i = 0; i < main.grid.organisms.size(); i++)
+		for (int i = main.grid.organisms.size() - 1; i >= 0; i--)
 		{
 			Organism org = main.grid.organisms.get(i);
 			main.fill(org.r, org.g, org.b);
@@ -121,6 +121,13 @@ public class RenderSystem extends BaseSystem {
 						main.fill(0,0,0);
 						main.text((int)-dHealth + "", (nr+0.5F)*width, (nc+0.5F)*height - height*frames/2);
 					}
+					if (unit.health < unit.maxHealth)
+					{
+						main.fill(255,0,0);
+						main.rect((nr+0.1F)*width, (nc+0.45F)*height, 0.8F*width, 0.1F*height);
+						main.fill(0,255,0);
+						main.rect((nr+0.1F)*width, (nc+0.45F)*height, 0.8F*width*(unit.health/unit.maxHealth), 0.1F*height);
+					}
 				}
 				nc++;
 			}
@@ -132,6 +139,7 @@ public class RenderSystem extends BaseSystem {
 		{
 			AttackArrow ar = arrows.get(i);
 			if (main.frameCount - ar.frameCreated > 40) continue;
+			if (plr.center == null) continue;
 			int nr1 = ar.a.row - plr.center.row + sight;
 			int nc1 = ar.a.col - plr.center.col + sight;
 			int nr2 = ar.d.row - plr.center.row + sight;
