@@ -15,15 +15,16 @@ public class Data {
 		
 		Organism temp;
 		
-		temp = new Organism();
+		temp = new Organism("Test");
 		temp.addUnit(0, 0);
 		temp.addUnit(0, 1);
 		temp.addUnit(0, -1);
 		temp.addUnit(1, 0);
 		temp.addUnit(-1, 0);
-		organisms.put("Test", temp);
+		temp.maxAction = 5;
+		organisms.put(temp.name, temp);
 		
-		temp = new Organism();
+		temp = new Organism("Player");
 		temp.addUnit(-1, 1);
 		temp.addUnit(0, 1);
 		temp.addUnit(1, 1);
@@ -32,7 +33,8 @@ public class Data {
 		temp.addUnit(0, -1);
 		temp.addUnit(-1, -1);
 		temp.addUnit(-1, 0);
-		organisms.put("Player", temp);
+		temp.maxAction = 5;
+		organisms.put(temp.name, temp);
 	}
 	
 	public static Organism getOrganism(String name)

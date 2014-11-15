@@ -15,6 +15,10 @@ public class Main extends PApplet {
 	
 	public ArrayList<BaseSystem> systems = new ArrayList<BaseSystem>();
 	public RenderSystem renderSystem = new RenderSystem(this);
+	public OrganismSystem organismSystem = new OrganismSystem(this);
+	public InputSystem inputSystem = new InputSystem(this);
+	
+	public int frameLastUpdate = 0;
 	
 	public void setup()
 	{
@@ -25,6 +29,10 @@ public class Main extends PApplet {
 		grid = new Grid(levelLoader.newLevel(128));
 		
 		systems.add(renderSystem);
+		systems.add(organismSystem);
+		systems.add(inputSystem);
+		
+		organismSystem.addGrid(grid);
 	}
 	
 	public void draw()
@@ -33,6 +41,11 @@ public class Main extends PApplet {
 		{
 			systems.get(i).tick();
 		}
+	}
+	
+	public void keyPressed()
+	{
+		inputSystem.queueKey(key);
 	}
 	
 }

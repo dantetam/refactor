@@ -7,7 +7,7 @@ import level.Tile;
 
 public class RenderSystem extends BaseSystem {
 
-	public int sight = 10;
+	public int sight = 15;
 
 	public RenderSystem(Main m)
 	{
@@ -51,11 +51,25 @@ public class RenderSystem extends BaseSystem {
 			for (int j = 0; j < org.units.size(); j++)
 			{
 				Entity unit = org.units.get(j);
-				main.fill(255,0,0);
-				main.rect(
-						(org.center.row + unit.rDis - plr.center.row + sight)*width,
-						(org.center.col + unit.cDis - plr.center.col + sight)*height,width,height
-						);
+				float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,40)/40F;
+				if (main.organismSystem.records[org.center.row][org.center.col] == null) //The unit recently moved to the spot
+				{
+					main.fill(255,0,0);
+					main.rect(
+							(org.center.row + unit.rDis - plr.center.row + sight)*width + width*(0.5F - frames/2F),
+							(org.center.col + unit.cDis - plr.center.col + sight)*height + height*(0.5F - frames/2F),
+							width*frames,height*frames
+							);
+				}
+				else if (main.organismSystem.records[org.center.row][org.center.col].equals(org)) //The unit is still there
+				{
+					main.fill(255,0,0);
+					main.rect(
+							(org.center.row + unit.rDis - plr.center.row + sight)*width,
+							(org.center.col + unit.cDis - plr.center.col + sight)*height,
+							width,height
+							);
+				}
 			}
 		}
 	}

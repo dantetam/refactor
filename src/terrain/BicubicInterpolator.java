@@ -15,7 +15,7 @@ public class BicubicInterpolator {
 		return cubicGetValue(arr, x+ 1);
 	}
 	
-	public double cubicGetValue(double[] p, double x) {
+	private double cubicGetValue(double[] p, double x) {
 		int xi = (int) x;
 		x -= xi;
 		double p0 = p[Math.max(0, xi - 1)];
