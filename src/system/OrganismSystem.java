@@ -78,6 +78,10 @@ public class OrganismSystem extends BaseSystem {
 	//although optimally it's org.act()
 	public void act(Organism org)
 	{
+		for (int i = 0; i < org.units.size(); i++)
+		{
+			org.units.get(i).attacked.clear();
+		}
 		while (org.action > 0)
 		{
 			if (org.queueTiles != null)
@@ -153,10 +157,11 @@ public class OrganismSystem extends BaseSystem {
 						}
 						if (!enAttack.deathFlag)
 						{
-							main.renderSystem.newArrow(
+							enAttack.attacked.add(en[1]);
+							/*main.renderSystem.newArrow(
 									main.grid.getTile(enAttack.owner.center.row + enAttack.rDis,enAttack.owner.center.col + enAttack.cDis),
 									main.grid.getTile(en[1].owner.center.row + en[1].rDis,en[1].owner.center.col + en[1].cDis),
-									main.frameCount);
+									main.frameCount);*/
 						}
 						org.action--;
 					}

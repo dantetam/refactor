@@ -195,10 +195,11 @@ public class InputSystem extends BaseSystem {
 						}
 						if (!enAttack.deathFlag)
 						{
-							main.renderSystem.newArrow(
+							enAttack.attacked.add(enemy);
+							/*main.renderSystem.newArrow(
 									main.grid.getTile(enAttack.owner.center.row + enAttack.rDis,enAttack.owner.center.col + enAttack.cDis),
 									main.grid.getTile(enemy.owner.center.row + enemy.rDis,enemy.owner.center.col + enemy.cDis),
-									main.frameCount);
+									main.frameCount);*/
 						}
 						plr.action--;
 					}

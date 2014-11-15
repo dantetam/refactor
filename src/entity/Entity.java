@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.ArrayList;
+
 import level.Tile;
 
 public class Entity {
@@ -12,6 +14,8 @@ public class Entity {
 	public int range;
 	
 	public long id;
+	
+	public ArrayList<Entity> attacked = new ArrayList<Entity>();
 	
 	public Entity(Organism owner, int r, int c, float h, float o, float d, float ranged)
 	{

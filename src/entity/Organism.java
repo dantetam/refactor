@@ -32,6 +32,7 @@ public class Organism {
 		{
 			Entity en = other.units.get(i);
 			Entity newEn = new Entity(this,en.rDis,en.cDis,en.health,en.offensiveStr,en.defensiveStr,en.rangedStr).range(en.range);
+			newEn.maxHealth = en.maxHealth; newEn.health = newEn.maxHealth;
 			units.add(newEn);
 		}
 		maxAction = other.maxAction;

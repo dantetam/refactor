@@ -162,7 +162,24 @@ public class RenderSystem extends BaseSystem {
 				main.rect((r+0.5F)*width,(c+0.5F)*height,2,2);
 			}
 		}
-		
+
+		//Add the little damage arrows
+		for (int i = 0; i < main.grid.organisms.size(); i++)
+		{
+			Organism org = main.grid.organisms.get(i);
+			for (int j = 0; j < org.units.size(); j++)
+			{
+				Entity unit = org.units.get(j);
+				for (int k = 0; k < unit.attacked.size(); k++)
+				{
+					if (unit.owner != null && unit.attacked.get(k).owner != null)
+						newArrow(main.grid.getTile(unit.trueRow(),unit.trueCol()),
+								main.grid.getTile(unit.attacked.get(k).trueRow(),unit.attacked.get(k).trueCol()),
+								main.frameCount);
+				}
+			}
+		}
+
 		for (int i = 0; i < arrows.size(); i++)
 		{
 			AttackArrow ar = arrows.get(i);
