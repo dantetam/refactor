@@ -17,10 +17,36 @@ public class RenderSystem extends BaseSystem {
 	public float debounce = 40;
 	private ArrayList<AttackArrow> arrows = new ArrayList<AttackArrow>();
 	public HashMap<String, PImage> textures = new HashMap<String, PImage>();
+	public PImage[][] terrainTextures;
 
 	public RenderSystem(Main m)
 	{
 		super(m);
+	}
+	
+	public void terrainTextures(double[][] biomes)
+	{
+		int rows = biomes.length; int cols = biomes[0].length;
+		terrainTextures = new PImage[rows][cols];
+		float width = main.width/(sight*2 + 1), height = main.height/(sight*2 + 1);
+		for (int r = 0; r < rows; r++)
+		{
+			for (int c = 0; c < cols; c++)
+			{
+				switch ((int)biomes[r][c])
+				{
+				case -1: terrainTextures[r][c] = getTerrainBlock(150,225,255,(int)width,(int)height); break;
+				case 0: terrainTextures[r][c] = getTerrainBlock(150,225,255,(int)width,(int)height); break;
+				case 1: terrainTextures[r][c] = getTerrainBlock(255,255,255,(int)width,(int)height); break;
+				case 2: terrainTextures[r][c] = getTerrainBlock(245,245,220,(int)width,(int)height); break;
+				case 3: terrainTextures[r][c] = getTerrainBlock(153,255,153,(int)width,(int)height); break;
+				case 4: terrainTextures[r][c] = getTerrainBlock(51,225,51,(int)width,(int)height); break;
+				case 5: terrainTextures[r][c] = getTerrainBlock(51,225,51,(int)width,(int)height); break;
+				case 6: terrainTextures[r][c] = getTerrainBlock(51,25,0,(int)width,(int)height); break;
+				default: terrainTextures[r][c] = getTerrainBlock(255,0,0,(int)width,(int)height); break;
+				}
+			}
+		}
 	}
 
 	public void tick()
@@ -52,7 +78,8 @@ public class RenderSystem extends BaseSystem {
 				default: main.fill(255,0,0); break;
 				}
 
-				main.rect(nr*width,nc*height,width,height);
+				//main.rect(nr*width,nc*height,width,height);
+				main.image(terrainTextures[r][c],nr*width,nc*height,width,height);
 				nc++;
 			}
 			nc = 0;
@@ -115,7 +142,7 @@ public class RenderSystem extends BaseSystem {
 				}
 			}
 		}
-		
+
 		main.fill(255,255,0);
 		main.stroke(1);
 		nr = 0; nc = 0;
@@ -134,7 +161,7 @@ public class RenderSystem extends BaseSystem {
 			nr++;
 		}
 		main.noStroke();
-		
+
 		nr = 0; nc = 0; //"Real" iterators to keep track of the row and column on screen
 		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
 		{
@@ -256,29 +283,46 @@ public class RenderSystem extends BaseSystem {
 		}
 	}
 
+	public PImage getTerrainBlock(float red, float green, float blue, int w, int h)
+	{
+		PImage temp = main.createImage(w,h,main.ARGB);
+		main.pushStyle();
+		float maxVari = 10; int spacing = 2;
+		for (int r = 0; r < w; r += spacing)
+			for (int c = 0; c < h; c += spacing)
+			{
+				for (int nr = r; nr < r + spacing; nr++)
+				{
+					for (int nc = c; nc < c + spacing; nc++)
+					{
+						temp.pixels[nr*w + nc] = main.color(
+								red + (float)(maxVari*2*Math.random()) - maxVari,
+								green + (float)(maxVari*2*Math.random()) - maxVari,
+								blue + (float)(maxVari*2*Math.random()) - maxVari,
+								255);
+					}
+				}
+			}
+		temp.updatePixels();
+		main.popStyle();
+		return temp;
+	}
+
 	public PImage getBlock(float red, float green, float blue, int w, int h)
 	{
 		PImage temp = main.createImage(w,h,main.ARGB);
 		main.pushStyle();
 		for (int r = 0; r < w; r++)
-		{
 			for (int c = 0; c < h; c++)
-			{
-				//temp.pixels[r*w + c] = main.color(red,green,blue,(float)(h-r)/(float)(h)*255);
 				temp.pixels[r*w + c] = main.color(red,green,blue,0);
-			}
-		}
-
 		int borderWidth = 10;
 		for (int i = borderWidth; i >= 0; i--)
 		{
-			float a = (10-Math.min(i,w-i-1))/(float)(borderWidth)*255F - 50;
-			//float a = 255;
+			float a = (borderWidth-Math.min(i,w-i-1))/(float)(borderWidth)*255F - 50;
 			for (int row = 0; row < h; row++)
 			{
 				temp.pixels[row*h + i] = main.color(red,green,blue,a);
 				temp.pixels[row*h + (w-i-1)] = main.color(red,green,blue,a);
-				//temp.pixels[(w-i)*h + row] = color(0,0,0,a);
 			}
 			for (int col = 0; col < w; col++)
 			{
@@ -286,7 +330,6 @@ public class RenderSystem extends BaseSystem {
 				temp.pixels[(w-i-1)*h + col] = main.color(red,green,blue,a);
 			}
 		}
-
 		temp.updatePixels();
 		main.popStyle();
 		return temp;

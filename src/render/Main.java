@@ -36,6 +36,7 @@ public class Main extends PApplet {
 		
 		organismSystem.addGrid(grid);
 		renderSystem.models();
+		renderSystem.terrainTextures(levelLoader.theBiomes);
 		
 		textSize(16);
 	}
