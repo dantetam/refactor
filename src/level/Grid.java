@@ -11,6 +11,7 @@ public class Grid {
 
 	private Tile[][] tiles;
 	public ArrayList<Organism> organisms;
+	public int[][] coins;
 
 	public ConflictSystem conflictSystem;
 
@@ -26,6 +27,8 @@ public class Grid {
 				tiles[r][c].biome = terrain[r][c];
 			}
 		}
+		
+		coins = new int[terrain.length][terrain[0].length];
 
 		organisms = new ArrayList<Organism>();
 
@@ -158,6 +161,11 @@ public class Grid {
 		if (getTile(r,c) != null)
 		{
 			organism.center = getTile(r,c);
+			if (organism.name.equals("Player"))
+			{
+				organism.coins += coins[r][c];
+				coins[r][c] = 0;
+			}
 		}
 	}
 

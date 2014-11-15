@@ -24,7 +24,7 @@ public class MenuSystem extends BaseSystem {
 		main.textAlign(main.LEFT, main.CENTER);
 		main.fill(255);
 		main.text("Action: " + plr.action + "/" + plr.maxAction, 25, 40);
-		main.text("Kills: " + plr.kills, 25, 55);
+		main.text("Coins: " + plr.coins, 25, 55);
 		
 		if (selected != null)
 		{

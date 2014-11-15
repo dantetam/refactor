@@ -35,6 +35,7 @@ public class Main extends PApplet {
 		systems.add(menuSystem);
 		
 		organismSystem.addGrid(grid);
+		renderSystem.models();
 		
 		textSize(16);
 	}

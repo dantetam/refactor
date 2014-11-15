@@ -13,7 +13,8 @@ public class Organism {
 	public ArrayList<Tile> queueTiles;
 	public int action, maxAction;
 	public float r,g,b;
-	public int kills = 0;
+	public int coins = 0;
+	//public int kills = 0;
 
 	public Organism(String name)
 	{
@@ -36,6 +37,7 @@ public class Organism {
 			newEn.maxHealth = en.maxHealth; newEn.health = newEn.maxHealth;
 			units.add(newEn);
 		}
+		color(other.r, other.g, other.b);
 		origUnits = units.size();
 		maxAction = other.maxAction;
 		action = maxAction;

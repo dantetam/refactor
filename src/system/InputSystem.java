@@ -46,9 +46,10 @@ public class InputSystem extends BaseSystem {
 			else if (key == 'r')
 			{
 				Organism plr = main.grid.organisms.get(0);
-				if (plr.kills >= 10*main.timesRefactored)
+				if (plr.coins >= 2*(main.timesRefactored+1))
 				{
-					plr.kills -= 10*main.timesRefactored;
+					plr.coins -= 3*(main.timesRefactored+1);
+					main.timesRefactored++;
 					main.grid = new Grid(new LevelLoader(System.currentTimeMillis()*(long)Math.random()).newLevel(128));
 					main.organismSystem.addGrid(main.grid);
 					main.grid.organisms.remove(0);
@@ -224,7 +225,7 @@ public class InputSystem extends BaseSystem {
 						}
 						else
 						{
-							plr.kills++;
+							//plr.kills++;
 						}
 						plr.action--;
 					}

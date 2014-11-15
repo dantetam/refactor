@@ -7,7 +7,7 @@ import entity.Organism;
 
 public class Data {
 
-	private static HashMap<String,Organism> organisms;
+	public static HashMap<String,Organism> organisms;
 	
 	public static void init()
 	{
@@ -16,6 +16,7 @@ public class Data {
 		Organism temp;
 		
 		temp = new Organism("Test");
+		temp.color(150,150,150);
 		temp.addUnit(0, 0, 15, 4, 2, 0).range(5);
 		temp.addUnit(0, 1, 10, 2, 2, 0);
 		temp.addUnit(0, -1, 10, 2, 2, 0);
@@ -25,6 +26,7 @@ public class Data {
 		organisms.put(temp.name, temp);
 		
 		temp = new Organism("Player");
+		temp.color(255,0,0);
 		temp.addUnit(-1, 1, 10, 2, 2, 0);
 		temp.addUnit(0, 1, 15, 4, 4, 0);
 		temp.addUnit(1, 1, 10, 2, 2, 0);

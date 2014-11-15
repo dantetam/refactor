@@ -156,10 +156,10 @@ public class OrganismSystem extends BaseSystem {
 						}
 						else //Implying death
 						{
-							if (en[1].owner.name.equals("Player"))
+							/*if (en[1].owner.name.equals("Player"))
 							{
 								en[1].owner.kills++;
-							}
+							}*/
 						}
 						org.action--;
 					}
@@ -196,12 +196,15 @@ public class OrganismSystem extends BaseSystem {
 			{
 				if ((float)(u.owner.units.size()-1)/(float)u.owner.origUnits < 0.5)
 				{
+					//System.out.println("Death");
+					main.grid.coins[u.trueRow()][u.trueCol()] += u.owner.units.size();
 					u.owner.units.clear();
 					org.units.remove(u.owner);
 					u.owner.center = null;
 				}
 				else
 				{
+					main.grid.coins[u.trueRow()][u.trueCol()] += 1;
 					org.destroy(u);
 				}
 			}
@@ -233,7 +236,7 @@ public class OrganismSystem extends BaseSystem {
 		if (target.health - damage[0] <= 0)
 		{
 			target.deathFlag = true;
-			if (shooter.owner.name.equals("Player")) shooter.owner.kills++;
+			//if (shooter.owner.name.equals("Player")) shooter.owner.kills++;
 		}
 		else
 		{

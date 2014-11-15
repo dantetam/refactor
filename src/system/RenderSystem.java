@@ -1,7 +1,11 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
+import data.Data;
+import processing.core.PImage;
 import entity.Entity;
 import entity.Organism;
 import render.Main;
@@ -12,6 +16,7 @@ public class RenderSystem extends BaseSystem {
 	public int sight = 10;
 	public float debounce = 40;
 	private ArrayList<AttackArrow> arrows = new ArrayList<AttackArrow>();
+	public HashMap<String, PImage> textures = new HashMap<String, PImage>();
 
 	public RenderSystem(Main m)
 	{
@@ -67,34 +72,46 @@ public class RenderSystem extends BaseSystem {
 				nr = (org.center.row + unit.rDis - plr.center.row + sight);
 				nc = (org.center.col + unit.cDis - plr.center.col + sight);
 
-				//System.out.println(main.organismSystem.respHealth.get(unit));
-
-				if (main.organismSystem.respHealth.get(unit) != null)
+				if (nr >= 0 && nr <= 2*sight + 1 && nc >= 0 && nc <= 2*sight + 1)
 				{
-					float dHealth = main.organismSystem.respHealth.get(unit) - unit.health;
-					if (dHealth > 0 && frames < 1)
+					if (main.organismSystem.respHealth.get(unit) != null)
 					{
-						xDis = width*0.2F*(1-frames%4)*(float)Math.pow(-1,main.frameCount-main.frameLastUpdate);
+						float dHealth = main.organismSystem.respHealth.get(unit) - unit.health;
+						if (dHealth > 0 && frames < 1)
+						{
+							xDis = width*0.2F*(1-frames%4)*(float)Math.pow(-1,main.frameCount-main.frameLastUpdate);
+						}
 					}
-				}
 
-				if (main.organismSystem.records[org.center.row][org.center.col] == null) //The unit recently moved to the spot
-				{
-					main.fill(org.r, org.g, org.b);
-					main.rect(
-							nr*width + width*(0.5F - frames/2F) + xDis,
-							nc*height + height*(0.5F - frames/2F),
-							width*frames,height*frames
-							);
-				}
-				else if (main.organismSystem.records[org.center.row][org.center.col].equals(org)) //The unit is still there
-				{
-					main.fill(org.r, org.g, org.b);
-					main.rect(
-							(org.center.row + unit.rDis - plr.center.row + sight)*width + xDis,
-							(org.center.col + unit.cDis - plr.center.col + sight)*height,
-							width,height
-							);
+					if (main.organismSystem.records[org.center.row][org.center.col] == null) //The unit recently moved to the spot
+					{
+						main.fill(org.r, org.g, org.b);
+						/*main.rect(
+								nr*width + width*(0.5F - frames/2F) + xDis,
+								nc*height + height*(0.5F - frames/2F),
+								width*frames,height*frames
+								);*/
+						main.image(textures.get(org.name), nr*width + width*(0.5F - frames/2F) + xDis,
+								nc*height + height*(0.5F - frames/2F), width*frames, height*frames);
+					}
+					else if (main.organismSystem.records[org.center.row][org.center.col].equals(org)) //The unit is still there
+					{
+						main.fill(org.r, org.g, org.b);
+						main.image(textures.get(org.name),
+								(org.center.row + unit.rDis - plr.center.row + sight)*width + xDis,
+								(org.center.col + unit.cDis - plr.center.col + sight)*height,
+								width,height
+								);
+					}
+					else //A different unit occupies the spot
+					{
+						main.fill(org.r, org.g, org.b);
+						main.image(textures.get(org.name),
+								(org.center.row + unit.rDis - plr.center.row + sight)*width,
+								(org.center.col + unit.cDis - plr.center.col + sight)*height,
+								width,height
+								);
+					}
 				}
 			}
 		}
@@ -110,7 +127,7 @@ public class RenderSystem extends BaseSystem {
 						main.grid.findEntity(r, c) == null) //A unit left
 				{
 					main.fill(candidate.r, candidate.g, candidate.b);
-					main.rect(
+					main.image(textures.get(candidate.name),
 							nr*width + width*(frames/2F),
 							nc*height + height*(frames/2F),
 							width*(1-frames),height*(1-frames)
@@ -150,16 +167,20 @@ public class RenderSystem extends BaseSystem {
 			nr++;
 		}
 
-		for (int i = 0; i < plr.queueTiles.size(); i++)
+		if (plr.queueTiles != null)
 		{
-			Tile t = plr.queueTiles.get(i);
-			int r = t.row - plr.center.row + sight;
-			int c = t.col - plr.center.col + sight;
-			if (r > 0 && r < sight*2 + 1 && c > 0 && c < sight*2 + 1)
+			for (int i = 0; i < plr.queueTiles.size(); i++)
 			{
-				main.fill(255,0,0);
-				main.stroke(255,0,0);
-				main.rect((r+0.5F)*width,(c+0.5F)*height,2,2);
+				Tile t = plr.queueTiles.get(i);
+				int r = t.row - plr.center.row + sight;
+				int c = t.col - plr.center.col + sight;
+				if (r > 0 && r < sight*2 + 1 && c > 0 && c < sight*2 + 1)
+				{
+					main.fill(255,0,0);
+					main.stroke(255,0,0);
+					int len = 10;
+					main.rect((r+0.5F)*width - len/2,(c+0.5F)*height - len/2,len,len);
+				}
 			}
 		}
 
@@ -179,6 +200,22 @@ public class RenderSystem extends BaseSystem {
 									main.frameCount);
 				}
 			}
+		}
+
+		main.fill(255,255,0);
+		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
+		{
+			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)
+			{
+				if (main.grid.getTile(r, c) == null) continue;
+				if (main.grid.coins[r][c] > 0)
+				{
+					main.rect((nr+0.3F)*width, (nc+0.3F)*height, width*0.4F, height*0.4F);
+				}
+				nc++;
+			}
+			nc = 0;
+			nr++;
 		}
 
 		for (int i = 0; i < arrows.size(); i++)
@@ -203,6 +240,52 @@ public class RenderSystem extends BaseSystem {
 				main.rect((nr2+0.5F)*width,(nc2+0.5F)*height,2,2);
 			}
 		}
+	}
+
+	public void models()
+	{
+		for (Entry<String, Organism> i : Data.organisms.entrySet())
+		{
+			Organism org = i.getValue();
+			int width = (int)(main.width/(sight*2F + 1F)), height = (int)(main.height/(sight*2F + 1F));
+			textures.put(i.getKey(), getBlock(org.r, org.g, org.b, width, height));
+		}
+	}
+
+	public PImage getBlock(float red, float green, float blue, int w, int h)
+	{
+		PImage temp = main.createImage(w,h,main.ARGB);
+		main.pushStyle();
+		for (int r = 0; r < w; r++)
+		{
+			for (int c = 0; c < h; c++)
+			{
+				//temp.pixels[r*w + c] = main.color(red,green,blue,(float)(h-r)/(float)(h)*255);
+				temp.pixels[r*w + c] = main.color(red,green,blue,0);
+			}
+		}
+
+		int borderWidth = 10;
+		for (int i = borderWidth; i >= 0; i--)
+		{
+			float a = (10-Math.min(i,w-i-1))/(float)(borderWidth)*255F - 50;
+			//float a = 255;
+			for (int row = 0; row < h; row++)
+			{
+				temp.pixels[row*h + i] = main.color(red,green,blue,a);
+				temp.pixels[row*h + (w-i-1)] = main.color(red,green,blue,a);
+				//temp.pixels[(w-i)*h + row] = color(0,0,0,a);
+			}
+			for (int col = 0; col < w; col++)
+			{
+				temp.pixels[i*w + col] = main.color(red,green,blue,a);
+				temp.pixels[(w-i-1)*h + col] = main.color(red,green,blue,a);
+			}
+		}
+
+		temp.updatePixels();
+		main.popStyle();
+		return temp;
 	}
 
 	public class AttackArrow

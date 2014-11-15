@@ -26,7 +26,7 @@ public class LevelLoader {
 		double[][] landSea = ds.generate(new double[]{0, 0, len, 15, 0.6},theSeed);
 		double cutoff = DiamondSquare.seaLevel(landSea, 60, 0.6);
 		//int[][] biomes = new int[landSea.length][landSea[0].length];
-		double[][] biomes = new PerlinNoise(theSeed).generate(new double[]{len,len,5.5,8,1,0.8,6,len});
+		double[][] biomes = new PerlinNoise(theSeed).generate(new double[]{len/2,len/2,5.5,8,1,0.8,6,len});
 		//double[][] 
 		int[][] t = new int[biomes.length][biomes[0].length];
 		for (int r = 0; r < biomes.length; r++)
