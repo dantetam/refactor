@@ -43,4 +43,9 @@ public class Entity {
 	
 	public Entity range(int n) {range = n; return this;}
 	
+	public int dist(Entity entity)
+	{
+		return Math.abs(trueRow() - entity.trueRow()) + Math.abs(trueCol() - entity.trueCol());
+	}
+	
 }

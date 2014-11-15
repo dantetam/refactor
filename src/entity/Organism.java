@@ -31,7 +31,7 @@ public class Organism {
 		for (int i = 0; i < other.units.size(); i++)
 		{
 			Entity en = other.units.get(i);
-			Entity newEn = new Entity(this,en.rDis,en.cDis,en.health,en.offensiveStr,en.defensiveStr,en.rangedStr);
+			Entity newEn = new Entity(this,en.rDis,en.cDis,en.health,en.offensiveStr,en.defensiveStr,en.rangedStr).range(en.range);
 			units.add(newEn);
 		}
 		maxAction = other.maxAction;

@@ -163,6 +163,8 @@ public class OrganismSystem extends BaseSystem {
 				}
 			}
 		}
+		if (candidates.size() == 0)
+			return null;
 		return candidates.get((int)(Math.random()*candidates.size()));
 	}
 	

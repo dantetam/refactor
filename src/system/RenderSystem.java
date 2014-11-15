@@ -124,6 +124,8 @@ public class RenderSystem extends BaseSystem {
 						main.fill(0,0,0);
 						main.text((int)-dHealth + "", (nr+0.5F)*width, (nc+0.5F)*height - height*frames/2);
 					}
+				}
+				if (unit != null)
 					if (unit.health < unit.maxHealth)
 					{
 						main.fill(255,0,0);
@@ -131,7 +133,6 @@ public class RenderSystem extends BaseSystem {
 						main.fill(0,255,0);
 						main.rect((nr+0.1F)*width, (nc+0.45F)*height, 0.8F*width*(unit.health/unit.maxHealth), 0.1F*height);
 					}
-				}
 				if (main.menuSystem.highlighted != null)
 				{
 					if (main.menuSystem.highlighted.equals(main.grid.getTile(r,c)))
@@ -157,6 +158,7 @@ public class RenderSystem extends BaseSystem {
 			if (r > 0 && r < sight*2 + 1 && c > 0 && c < sight*2 + 1)
 			{
 				main.fill(255,0,0);
+				main.stroke(255,0,0);
 				main.rect((r+0.5F)*width,(c+0.5F)*height,2,2);
 			}
 		}
@@ -165,7 +167,7 @@ public class RenderSystem extends BaseSystem {
 		{
 			AttackArrow ar = arrows.get(i);
 			if (main.frameCount - ar.frameCreated > 40) continue;
-			if (plr.center == null) continue;
+			if (plr.center == null || ar.a == null) continue;
 			int nr1 = ar.a.row - plr.center.row + sight;
 			int nc1 = ar.a.col - plr.center.col + sight;
 			int nr2 = ar.d.row - plr.center.row + sight;

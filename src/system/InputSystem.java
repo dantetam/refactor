@@ -86,6 +86,7 @@ public class InputSystem extends BaseSystem {
 		{
 			if (clicks.get(0).mode == 0) 
 			{
+				//if (main.menuSystem.highlighted == null) continue;
 				Entity candidate = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
 				if (candidate != null)
 				{
@@ -123,7 +124,7 @@ public class InputSystem extends BaseSystem {
 				Entity enemy = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
 				if (enemy != null)
 				{
-					if (!enemy.equals(plr) && plr.action > 0)
+					if (!enemy.owner.equals(plr) && plr.action > 0)
 					{
 						Entity enAttack;
 						if (main.menuSystem.selected != null)
@@ -134,7 +135,30 @@ public class InputSystem extends BaseSystem {
 						{
 							enAttack = plr.units.get((int)(Math.random()*plr.units.size()));
 						}
-						int[] damage = main.grid.conflictSystem.attack(enAttack, enemy);
+						int dist = enAttack.dist(enemy);
+						int[] damage;
+						System.out.println(enAttack.range);
+						if (dist <= 2 && enAttack.range == 0)
+						{
+							damage = main.grid.conflictSystem.attack(enAttack, enemy);
+						}
+						else if (enAttack.range == 0)
+						{
+							clicks.remove(0);
+							continue;
+						}
+						else if (dist > enAttack.range && enAttack.range > 0)
+						{
+							clicks.remove(0);
+							continue;
+						}
+						else if (dist <= enAttack.range && enAttack.range > 0)
+						{
+							System.out.println("Ranged");
+							damage = main.grid.conflictSystem.fire(enAttack, enemy);
+						}
+						else
+							damage = main.grid.conflictSystem.attack(enAttack, enemy);
 						if (enAttack.health - damage[1] <= 0 && enemy.health - damage[0] <= 0)
 						{
 							if (enAttack.health >= enemy.health)
@@ -192,15 +216,22 @@ public class InputSystem extends BaseSystem {
 
 	public void mousePass(float mouseX, float mouseY)
 	{
-		Tile pivot = main.grid.getTile(
-				main.grid.organisms.get(0).center.row - main.renderSystem.sight,
-				main.grid.organisms.get(0).center.col - main.renderSystem.sight
-				);
-		//float width = main.width/(main.renderSystem.sight*2 + 1), height = main.height/(main.renderSystem.sight*2 + 1);
-		main.menuSystem.highlighted = main.grid.getTile(
-				(int)(pivot.row + (mouseX/main.width)*(float)(main.renderSystem.sight*2 + 1)),
-				(int)(pivot.col + (mouseY/main.height)*(float)(main.renderSystem.sight*2 + 1))
-				);
+		if (main.frameCount > 20)
+		{
+			Tile pivot = main.grid.getTile(
+					main.grid.organisms.get(0).center.row - main.renderSystem.sight,
+					main.grid.organisms.get(0).center.col - main.renderSystem.sight
+					);
+			//float width = main.width/(main.renderSystem.sight*2 + 1), height = main.height/(main.renderSystem.sight*2 + 1);
+			//System.out.println(pivot);
+			if (pivot != null)
+			{
+				main.menuSystem.highlighted = main.grid.getTile(
+						(int)(pivot.row + (mouseX/main.width)*(float)(main.renderSystem.sight*2 + 1)),
+						(int)(pivot.col + (mouseY/main.height)*(float)(main.renderSystem.sight*2 + 1))
+						);
+			}
+		}
 		//System.out.println((int)(pivot.row + (mouseX/main.width)*(float)main.grid.rows()) + "," +
 		//(int)(pivot.col + (mouseY/main.height)*(float)main.grid.cols()));
 	}
