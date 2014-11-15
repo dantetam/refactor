@@ -11,7 +11,7 @@ public class InputSystem extends BaseSystem {
 
 	private ArrayList<Character> queue;
 	private ArrayList<Click> clicks;
-	
+
 	public InputSystem(Main m) {
 		super(m);
 		queue = new ArrayList<Character>();
@@ -81,19 +81,115 @@ public class InputSystem extends BaseSystem {
 				}
 			}
 		}
+		Organism plr = main.grid.organisms.get(0);
+		while (clicks.size() > 0) //Left click to move/select, right click to attack
+		{
+			if (clicks.get(0).mode == 0) 
+			{
+				Entity candidate = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
+				if (candidate != null)
+				{
+					if (candidate.owner.equals(main.grid.organisms.get(0)))
+					{
+						Entity lastSelected = main.menuSystem.selected;
+						main.menuSystem.selected = candidate;
+						//Attempt to unselect an item
+						if (lastSelected != null)
+						{
+							if (lastSelected.equals(main.menuSystem.selected))
+							{
+								main.menuSystem.selected = null;
+							}
+						}
+					}
+				}
+				else
+				{
+					/*if (main.menuSystem.selected != null)
+					{
+						main.menuSystem.selected.owner.queueTiles.clear();
+						main.organismSystem.pathFindTo(main.menuSystem.selected.owner, 
+								main.menuSystem.highlighted.row, 
+								main.menuSystem.highlighted.col);
+					}*/
+					plr.queueTiles.clear();
+					main.organismSystem.pathFindTo(plr, 
+							main.menuSystem.highlighted.row, 
+							main.menuSystem.highlighted.col);
+				}
+			}
+			else 
+			{
+				Entity enemy = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
+				if (enemy != null)
+				{
+					if (!enemy.equals(plr) && plr.action > 0)
+					{
+						Entity enAttack;
+						if (main.menuSystem.selected != null)
+						{
+							enAttack = main.menuSystem.selected;
+						}
+						else
+						{
+							enAttack = plr.units.get((int)(Math.random()*plr.units.size()));
+						}
+						int[] damage = main.grid.conflictSystem.attack(enAttack, enemy);
+						if (enAttack.health - damage[1] <= 0 && enemy.health - damage[0] <= 0)
+						{
+							if (enAttack.health >= enemy.health)
+							{
+								enemy.deathFlag = true;
+								//enemy.owner.destroy(enemy);
+								enAttack.health -= damage[1];
+							}
+							else
+							{
+								enAttack.deathFlag = true;
+								enemy.health -= damage[0];
+							}
+						}
+						else if (enAttack.health - damage[1] <= 0)
+						{
+							enAttack.deathFlag = true;
+							enemy.health -= damage[0];
+						}
+						else if (enemy.health - damage[0] <= 0)
+						{
+							enemy.deathFlag = true;
+							enAttack.health -= damage[1];
+						}
+						else
+						{
+							enemy.health -= damage[0];
+							enAttack.health -= damage[1];
+						}
+						if (!enAttack.deathFlag)
+						{
+							main.renderSystem.newArrow(
+									main.grid.getTile(enAttack.owner.center.row + enAttack.rDis,enAttack.owner.center.col + enAttack.cDis),
+									main.grid.getTile(enemy.owner.center.row + enemy.rDis,enemy.owner.center.col + enemy.cDis),
+									main.frameCount);
+						}
+						plr.action--;
+					}
+				}
+			}
+			clicks.remove(0);
+		}
 	}
 
 	public void queueKey(char key)
 	{
 		queue.add(key);
 	}
-	
-	public class Click {public float x,y; public Click(float a, float b) {x = a; y = b;}}
-	public void queueMouse(float mouseX, float mouseY)
+
+	public class Click {public float x,y; public int mode; public Click(float a, float b, int m) {x = a; y = b; mode = m;}}
+	public void queueMouse(float mouseX, float mouseY, int mode)
 	{
-		clicks.add(new Click(mouseX, mouseY));
+		clicks.add(new Click(mouseX, mouseY, mode));
 	}
-	
+
 	public void mousePass(float mouseX, float mouseY)
 	{
 		Tile pivot = main.grid.getTile(
@@ -108,5 +204,5 @@ public class InputSystem extends BaseSystem {
 		//System.out.println((int)(pivot.row + (mouseX/main.width)*(float)main.grid.rows()) + "," +
 		//(int)(pivot.col + (mouseY/main.height)*(float)main.grid.cols()));
 	}
-	
+
 }

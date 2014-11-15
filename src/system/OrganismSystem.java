@@ -77,7 +77,7 @@ public class OrganismSystem extends BaseSystem {
 								Entity target = randomTarget(range);
 								if (target != null)
 								{
-									
+									shoot(range,target);
 									shot = true;
 									org.action--;
 									break;
@@ -164,6 +164,24 @@ public class OrganismSystem extends BaseSystem {
 			}
 		}
 		return candidates.get((int)(Math.random()*candidates.size()));
+	}
+	
+	public void shoot(Entity shooter, Entity target)
+	{
+		int[] damage = main.grid.conflictSystem.fire(shooter, target);
+		if (target.health - damage[0] <= 0)
+		{
+			target.deathFlag = true;
+		}
+		else
+		{
+			target.health -= damage[0];
+		}
+		main.renderSystem.newArrow(
+				main.grid.getTile(shooter.owner.center.row + shooter.rDis,shooter.owner.center.col + shooter.cDis),
+				main.grid.getTile(target.owner.center.row + target.rDis,target.owner.center.col + target.cDis),
+				main.frameCount);
+		//shooter.owner.action--; redundant
 	}
 	
 	public ArrayList<Tile> pathFindTo(Organism org, int r, int c)

@@ -37,6 +37,7 @@ public class Entity {
 	
 	public boolean equals(Entity en)
 	{
+		if (en == null) return false;
 		return id == en.id;
 	}
 	

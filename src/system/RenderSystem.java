@@ -12,7 +12,7 @@ public class RenderSystem extends BaseSystem {
 	public int sight = 10;
 	public float debounce = 40;
 	private ArrayList<AttackArrow> arrows = new ArrayList<AttackArrow>();
-	
+
 	public RenderSystem(Main m)
 	{
 		super(m);
@@ -33,14 +33,7 @@ public class RenderSystem extends BaseSystem {
 				if (t == null) continue;
 				main.stroke(255);
 				main.strokeWeight(1);
-				if (main.menuSystem.highlighted != null)
-				{
-					if (main.menuSystem.highlighted.equals(t))
-					{
-						main.stroke(0,0,255);
-						main.strokeWeight(5);
-					}
-				}
+
 				switch (t.biome)
 				{
 				case -1: main.fill(150,225,255); main.noStroke(); break;
@@ -53,6 +46,7 @@ public class RenderSystem extends BaseSystem {
 				case 6: main.fill(51,25,0); break;
 				default: main.fill(255,0,0); break;
 				}
+
 				main.rect(nr*width,nc*height,width,height);
 				nc++;
 			}
@@ -138,10 +132,33 @@ public class RenderSystem extends BaseSystem {
 						main.rect((nr+0.1F)*width, (nc+0.45F)*height, 0.8F*width*(unit.health/unit.maxHealth), 0.1F*height);
 					}
 				}
+				if (main.menuSystem.highlighted != null)
+				{
+					if (main.menuSystem.highlighted.equals(main.grid.getTile(r,c)))
+					{
+						main.stroke(0,0,255);
+						main.strokeWeight(5);
+						main.line((nr+1)*width, nc*height, nr*width, (nc+1)*height);
+						main.line(nr*width, nc*height, (nr+1)*width, (nc+1)*height);
+					}
+				}
+				main.strokeWeight(1);
 				nc++;
 			}
 			nc = 0;
 			nr++;
+		}
+
+		for (int i = 0; i < plr.queueTiles.size(); i++)
+		{
+			Tile t = plr.queueTiles.get(i);
+			int r = t.row - plr.center.row + sight;
+			int c = t.col - plr.center.col + sight;
+			if (r > 0 && r < sight*2 + 1 && c > 0 && c < sight*2 + 1)
+			{
+				main.fill(255,0,0);
+				main.rect((r+0.5F)*width,(c+0.5F)*height,2,2);
+			}
 		}
 		
 		for (int i = 0; i < arrows.size(); i++)
@@ -165,7 +182,7 @@ public class RenderSystem extends BaseSystem {
 			}
 		}
 	}
-	
+
 	public class AttackArrow
 	{
 		public Tile a,d; public int frameCreated;

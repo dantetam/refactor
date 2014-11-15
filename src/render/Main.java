@@ -53,4 +53,12 @@ public class Main extends PApplet {
 		inputSystem.queueKey(key);
 	}
 	
+	public void mousePressed()
+	{
+		if (mouseButton == LEFT)
+			inputSystem.queueMouse(mouseX, mouseY, 0);
+		else
+			inputSystem.queueMouse(mouseX, mouseY, 1);
+	}
+	
 }
