@@ -1,8 +1,9 @@
 package render;
 
 import java.util.ArrayList;
-import processing.core.PApplet;
 
+import data.Data;
+import processing.core.PApplet;
 import level.Grid;
 import level.LevelLoader;
 import system.*;
@@ -17,9 +18,11 @@ public class Main extends PApplet {
 	
 	public void setup()
 	{
-		size(1600,900);
+		size(900,900);
+		Data.init();
+		
 		levelLoader = new LevelLoader(870L);
-		grid = new Grid(levelLoader.newLevel(64));
+		grid = new Grid(levelLoader.newLevel(128));
 		
 		systems.add(renderSystem);
 	}
