@@ -201,8 +201,9 @@ public class RenderSystem extends BaseSystem {
 				}
 			}
 		}
-
+		
 		main.fill(255,255,0);
+		nr = 0; nc = 0;
 		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
 		{
 			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)

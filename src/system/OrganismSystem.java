@@ -58,6 +58,12 @@ public class OrganismSystem extends BaseSystem {
 						break;
 					}
 				}
+				for (int i = 0; i < 10; i++)
+				{
+					int r = (int)(Math.random()*main.grid.rows());
+					int c = (int)(Math.random()*main.grid.cols());
+					main.grid.coins[r][c] += 1;
+				}
 				main.grid.moveCenterTo(org, t.row, t.col);
 				org.color(150,150,150);
 			}
