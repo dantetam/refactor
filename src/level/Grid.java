@@ -38,7 +38,23 @@ public class Grid {
 		moveCenterTo(plr, t.row, t.col);
 		plr.color(255,0,0);
 
+		
 		for (int i = 1; i < 50; i++)
+		{
+			Organism org = Data.randomOrganism();
+			organisms.add(org);
+			while (true)
+			{
+				t = randomLand();
+				moveCenterTo(org, t.row, t.col);
+				Entity[] en = valid(org, t.row, t.col); 
+				if (en == null)
+				{
+					break;
+				}
+			}
+		}
+		/*for (int i = 1; i < 50; i++)
 		{
 			Organism org = Data.getOrganism("Test");
 			organisms.add(org);
@@ -52,8 +68,22 @@ public class Grid {
 					break;
 				}
 			}
-			org.color(150,150,150);
 		}
+		for (int i = 1; i < 10; i++)
+		{
+			Organism org = Data.getOrganism("Spider");
+			organisms.add(org);
+			while (true)
+			{
+				t = randomLand();
+				moveCenterTo(org, t.row, t.col);
+				Entity[] en = valid(org, t.row, t.col); 
+				if (en == null)
+				{
+					break;
+				}
+			}		
+		}*/
 
 		conflictSystem = new ConflictSystem(this);
 	}
