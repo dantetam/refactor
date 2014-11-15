@@ -33,6 +33,7 @@ public class Grid {
 		organisms.add(plr);
 		Tile t = randomLand();
 		moveCenterTo(plr, t.row, t.col);
+		plr.color(255,0,0);
 
 		for (int i = 1; i < 15; i++)
 		{
@@ -40,6 +41,7 @@ public class Grid {
 			organisms.add(org);
 			t = randomLand();
 			moveCenterTo(org, t.row, t.col);
+			org.color(150,150,150);
 		}
 		
 		conflictSystem = new ConflictSystem(this);

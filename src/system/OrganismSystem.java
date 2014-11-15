@@ -1,6 +1,7 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import level.Grid;
 import level.Pathfinder;
@@ -13,11 +14,13 @@ public class OrganismSystem extends BaseSystem {
 
 	public boolean nextTurn = false;
 	public Organism[][] records;
+	public HashMap<Entity,Integer> respHealth;
 	public Pathfinder pathfinder;
 
 	public OrganismSystem(Main m)
 	{
 		super(m);
+		respHealth = new HashMap<Entity,Integer>();
 	}
 
 	public void tick()
@@ -70,36 +73,44 @@ public class OrganismSystem extends BaseSystem {
 					}
 					else
 					{
-						System.out.println("Attack");
-						int[] damage = main.grid.conflictSystem.attack(en[0], en[1]);
-						if (en[0].health - damage[1] <= 0 && en[1].health - damage[0] <= 0)
+						//System.out.println("Attack");
+						Entity enAttack = org.units.get((int)(Math.random()*org.units.size()));
+						int[] damage = main.grid.conflictSystem.attack(enAttack, en[1]);
+						if (enAttack.health - damage[1] <= 0 && en[1].health - damage[0] <= 0)
 						{
-							if (en[0].health >= en[1].health)
+							if (enAttack.health >= en[1].health)
 							{
 								en[1].deathFlag = true;
 								//en[1].owner.destroy(en[1]);
-								en[0].health -= damage[1];
+								enAttack.health -= damage[1];
 							}
 							else
 							{
-								en[0].deathFlag = true;
+								enAttack.deathFlag = true;
 								en[1].health -= damage[0];
 							}
 						}
-						else if (en[0].health - damage[1] <= 0)
+						else if (enAttack.health - damage[1] <= 0)
 						{
-							en[0].deathFlag = true;
+							enAttack.deathFlag = true;
 							en[1].health -= damage[0];
 						}
 						else if (en[1].health - damage[0] <= 0)
 						{
 							en[1].deathFlag = true;
-							en[0].health -= damage[1];
+							enAttack.health -= damage[1];
 						}
 						else
 						{
 							en[1].health -= damage[0];
-							en[0].health -= damage[1];
+							enAttack.health -= damage[1];
+						}
+						if (!enAttack.deathFlag)
+						{
+							main.renderSystem.newArrow(
+									main.grid.getTile(enAttack.owner.center.row + enAttack.rDis,enAttack.owner.center.col + enAttack.cDis),
+									main.grid.getTile(en[1].owner.center.row + en[1].rDis,en[1].owner.center.col + en[1].cDis),
+									main.frameCount);
 						}
 						org.action--;
 					}
@@ -150,6 +161,8 @@ public class OrganismSystem extends BaseSystem {
 				Entity u = org.units.get(j);
 				if (main.grid.getTile(org.center.row + u.rDis, org.center.col + u.cDis) != null)
 					records[org.center.row + u.rDis][org.center.col + u.cDis] = org;
+				respHealth.put(u, u.health);
+				//System.out.println(respHealth.get(u));
 			}
 		}
 	}

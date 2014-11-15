@@ -12,6 +12,7 @@ public class Organism {
 	public Tile center;
 	public ArrayList<Tile> queueTiles;
 	public int action, maxAction;
+	public float r,g,b;
 	
 	public Organism(String name)
 	{
@@ -52,6 +53,11 @@ public class Organism {
 	public boolean equals(Organism org)
 	{
 		return id == org.id;
+	}
+	
+	public void color(float x, float y, float z)
+	{
+		r = x; g = y; b = z;
 	}
 	
 }

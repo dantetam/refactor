@@ -7,10 +7,12 @@ import render.Main;
 public class InputSystem extends BaseSystem {
 
 	private ArrayList<Character> queue;
+	private ArrayList<Click> clicks;
 	
 	public InputSystem(Main m) {
 		super(m);
 		queue = new ArrayList<Character>();
+		clicks = new ArrayList<Click>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,6 +43,12 @@ public class InputSystem extends BaseSystem {
 	public void queueKey(char key)
 	{
 		queue.add(key);
+	}
+	
+	public class Click {public float x,y; public Click(float a, float b) {x = a; y = b;}}
+	public void queueMouse(float mouseX, float mouseY)
+	{
+		
 	}
 	
 }
