@@ -115,6 +115,26 @@ public class RenderSystem extends BaseSystem {
 				}
 			}
 		}
+		
+		main.fill(255,255,0);
+		main.stroke(1);
+		nr = 0; nc = 0;
+		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
+		{
+			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)
+			{
+				if (main.grid.getTile(r, c) == null) continue;
+				if (main.grid.coins[r][c] > 0)
+				{
+					main.rect((nr+0.3F)*width, (nc+0.3F)*height, width*0.4F, height*0.4F);
+				}
+				nc++;
+			}
+			nc = 0;
+			nr++;
+		}
+		main.noStroke();
+		
 		nr = 0; nc = 0; //"Real" iterators to keep track of the row and column on screen
 		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
 		{
@@ -200,23 +220,6 @@ public class RenderSystem extends BaseSystem {
 									main.frameCount);
 				}
 			}
-		}
-		
-		main.fill(255,255,0);
-		nr = 0; nc = 0;
-		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
-		{
-			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)
-			{
-				if (main.grid.getTile(r, c) == null) continue;
-				if (main.grid.coins[r][c] > 0)
-				{
-					main.rect((nr+0.3F)*width, (nc+0.3F)*height, width*0.4F, height*0.4F);
-				}
-				nc++;
-			}
-			nc = 0;
-			nr++;
 		}
 
 		for (int i = 0; i < arrows.size(); i++)

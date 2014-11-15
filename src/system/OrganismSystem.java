@@ -58,12 +58,12 @@ public class OrganismSystem extends BaseSystem {
 						break;
 					}
 				}
-				for (int i = 0; i < 10; i++)
+				/*for (int i = 0; i < 10; i++)
 				{
 					int r = (int)(Math.random()*main.grid.rows());
 					int c = (int)(Math.random()*main.grid.cols());
 					main.grid.coins[r][c] += 1;
-				}
+				}*/
 				main.grid.moveCenterTo(org, t.row, t.col);
 				org.color(150,150,150);
 			}
@@ -198,6 +198,7 @@ public class OrganismSystem extends BaseSystem {
 		{
 			if (j >= org.units.size()) continue;
 			Entity u = org.units.get(j);
+			//Handle death
 			if (u.deathFlag)
 			{
 				if ((float)(u.owner.units.size()-1)/(float)u.owner.origUnits < 0.5)
@@ -212,6 +213,14 @@ public class OrganismSystem extends BaseSystem {
 				{
 					main.grid.coins[u.trueRow()][u.trueCol()] += 1;
 					org.destroy(u);
+				}
+			}
+			else //Heal if no damage was taken
+			{
+				if (respHealth.get(u) <= u.health)
+				{
+					u.health += 0.5;
+					if (u.health > u.maxHealth) u.health = u.maxHealth;
 				}
 			}
 		}

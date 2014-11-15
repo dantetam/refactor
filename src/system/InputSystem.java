@@ -32,6 +32,20 @@ public class InputSystem extends BaseSystem {
 				if (main.frameCount - main.frameLastUpdate > main.renderSystem.debounce)
 					main.organismSystem.nextTurn = true;
 			}
+			else if (key == 'p')
+			{
+				Tile pivot = main.grid.getTile(
+						main.grid.organisms.get(0).center.row - main.renderSystem.sight,
+						main.grid.organisms.get(0).center.col - main.renderSystem.sight
+						);
+				if (pivot != null)
+				{
+					main.menuSystem.highlighted = main.grid.getTile(
+							(int)(pivot.row + (main.mouseX/main.width)*(float)(main.renderSystem.sight*2 + 1)),
+							(int)(pivot.col + (main.mouseY/main.height)*(float)(main.renderSystem.sight*2 + 1))
+							);
+				}
+			}
 			else if (key == 'm')
 			{
 				if (main.renderSystem.sight == 10)
@@ -46,9 +60,9 @@ public class InputSystem extends BaseSystem {
 			else if (key == 'r')
 			{
 				Organism plr = main.grid.organisms.get(0);
-				if (plr.coins >= 2*(main.timesRefactored+1))
+				if (plr.coins >= 10*(main.timesRefactored+1))
 				{
-					plr.coins -= 3*(main.timesRefactored+1);
+					plr.coins -= 10*(main.timesRefactored+1);
 					main.timesRefactored++;
 					main.grid = new Grid(new LevelLoader(System.currentTimeMillis()*(long)Math.random()).newLevel(128));
 					main.organismSystem.addGrid(main.grid);
