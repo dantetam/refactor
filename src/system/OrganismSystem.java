@@ -36,21 +36,12 @@ public class OrganismSystem extends BaseSystem {
 			for (int i = 0; i < main.grid.organisms.size(); i++)
 			{
 				Organism org = main.grid.organisms.get(i);
-				act(org);
+				if (org.center != null)
+					act(org);
+				else
+					continue;
 
 				org.action = org.maxAction;
-			}
-			for (int i = main.grid.organisms.size() - 1; i >= 0; i--)
-			{
-				Organism org = main.grid.organisms.get(i);
-				for (int j = org.units.size() - 1; j >= 0; j--)
-				{
-					Entity u = org.units.get(j);
-					if (u.deathFlag)
-					{
-						org.destroy(u);
-					}
-				}
 			}
 			if (Math.random() < 1F - 1F/(((float)turnsPassed+1F)/20F))
 			{
@@ -197,6 +188,24 @@ public class OrganismSystem extends BaseSystem {
 				break;
 			}
 		}
+		for (int j = org.units.size() - 1; j >= 0; j--)
+		{
+			if (j >= org.units.size()) continue;
+			Entity u = org.units.get(j);
+			if (u.deathFlag)
+			{
+				if ((float)(u.owner.units.size()-1)/(float)u.owner.origUnits < 0.5)
+				{
+					u.owner.units.clear();
+					org.units.remove(u.owner);
+					u.owner.center = null;
+				}
+				else
+				{
+					org.destroy(u);
+				}
+			}
+		}
 	}
 
 	public Entity randomTarget(Entity a)
@@ -224,6 +233,7 @@ public class OrganismSystem extends BaseSystem {
 		if (target.health - damage[0] <= 0)
 		{
 			target.deathFlag = true;
+			if (shooter.owner.name.equals("Player")) shooter.owner.kills++;
 		}
 		else
 		{

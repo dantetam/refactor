@@ -173,9 +173,10 @@ public class RenderSystem extends BaseSystem {
 				for (int k = 0; k < unit.attacked.size(); k++)
 				{
 					if (unit.owner != null && unit.attacked.get(k).owner != null)
-						newArrow(main.grid.getTile(unit.trueRow(),unit.trueCol()),
-								main.grid.getTile(unit.attacked.get(k).trueRow(),unit.attacked.get(k).trueCol()),
-								main.frameCount);
+						if (unit.attacked.get(k).owner.center != null)
+							newArrow(main.grid.getTile(unit.trueRow(),unit.trueCol()),
+									main.grid.getTile(unit.attacked.get(k).trueRow(),unit.attacked.get(k).trueCol()),
+									main.frameCount);
 				}
 			}
 		}
