@@ -13,7 +13,7 @@ public class Grid {
 	public ArrayList<Organism> organisms;
 
 	public ConflictSystem conflictSystem;
-	
+
 	public Grid(int[][] terrain)
 	{
 		tiles = new Tile[terrain.length][terrain[0].length];
@@ -39,11 +39,19 @@ public class Grid {
 		{
 			Organism org = Data.getOrganism("Test");
 			organisms.add(org);
-			t = randomLand();
-			moveCenterTo(org, t.row, t.col);
+			while (true)
+			{
+				t = randomLand();
+				moveCenterTo(org, t.row, t.col);
+				Entity[] en = valid(org, t.row, t.col); 
+				if (en == null)
+				{
+					break;
+				}
+			}
 			org.color(150,150,150);
 		}
-		
+
 		conflictSystem = new ConflictSystem(this);
 	}
 
@@ -62,7 +70,7 @@ public class Grid {
 		}
 		return null;
 	}
-	
+
 	//Checks to see if a hypothetical move by organism a would intersect organism b's territory
 	private Entity[] intersectInFuture(Organism a, Organism b, int r, int c)
 	{
@@ -82,7 +90,7 @@ public class Grid {
 		}
 		return intersect(aFuture, bFuture);
 	}
-	
+
 	//Checks to see if two lists have an intersection
 	private Entity[] intersect(ArrayList<Entity> a, ArrayList<Entity> b)
 	{
@@ -100,7 +108,7 @@ public class Grid {
 		}
 		return null;
 	}
-	
+
 	public Tile getTile(int r, int c)
 	{
 		if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length)
@@ -109,7 +117,7 @@ public class Grid {
 		}
 		return null;
 	}
-	
+
 	public Entity findEntity(int r, int c)
 	{
 		for (int i = 0; i < organisms.size(); i++)
@@ -126,7 +134,7 @@ public class Grid {
 		}
 		return null;
 	}
-	
+
 	public Tile randomLand()
 	{
 		int r,c;
