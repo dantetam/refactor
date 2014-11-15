@@ -3,6 +3,7 @@ package system;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import data.Data;
 import level.Grid;
 import level.Pathfinder;
 import level.Tile;
@@ -16,6 +17,7 @@ public class OrganismSystem extends BaseSystem {
 	public Organism[][] records;
 	public HashMap<Entity,Float> respHealth;
 	public Pathfinder pathfinder;
+	public int turnsPassed = 0;
 
 	public OrganismSystem(Main m)
 	{
@@ -28,6 +30,7 @@ public class OrganismSystem extends BaseSystem {
 		if (nextTurn)
 		{
 			nextTurn = false;
+			turnsPassed++;
 			main.frameLastUpdate = main.frameCount;
 			record();
 			for (int i = 0; i < main.grid.organisms.size(); i++)
@@ -45,9 +48,27 @@ public class OrganismSystem extends BaseSystem {
 					Entity u = org.units.get(j);
 					if (u.deathFlag)
 					{
-						org.units.remove(u);
+						org.destroy(u);
 					}
 				}
+			}
+			if (Math.random() < 1F - 1F/(((float)turnsPassed+1F)/20F))
+			{
+				Organism org = Data.getOrganism("Test");
+				main.grid.organisms.add(org);
+				Tile t;
+				while (true)
+				{
+					t = main.grid.randomLand();
+					//main.grid.moveCenterTo(org, t.row, t.col);
+					Entity[] en = main.grid.valid(org, t.row, t.col); 
+					if (en == null)
+					{
+						break;
+					}
+				}
+				main.grid.moveCenterTo(org, t.row, t.col);
+				org.color(150,150,150);
 			}
 		}
 	}
@@ -84,13 +105,21 @@ public class OrganismSystem extends BaseSystem {
 								}
 							}
 						}
-						main.grid.moveCenterTo(org, t.row, t.col);
-						org.queueTiles.remove(org.queueTiles.size()-1);
-						org.action--;
+						if (shot)
+						{
+							org.queueTiles.clear();
+						}
+						else
+						{
+							main.grid.moveCenterTo(org, t.row, t.col);
+							org.queueTiles.remove(org.queueTiles.size()-1);
+							org.action--;
+						}
 					}
 					else
 					{
 						//System.out.println("Attack");
+						org.queueTiles.clear();
 						Entity enAttack = org.units.get((int)(Math.random()*org.units.size()));
 						int[] damage = main.grid.conflictSystem.attack(enAttack, en[1]);
 						if (enAttack.health - damage[1] <= 0 && en[1].health - damage[0] <= 0)
@@ -136,7 +165,16 @@ public class OrganismSystem extends BaseSystem {
 			}
 			if (!org.name.equals("Player"))
 			{
-				Tile t = main.grid.randomLand();
+				Organism plr = main.grid.organisms.get(0);
+				Tile t;
+				if (org.center.dist(plr.center) < 6) //Go attack the player if the player is near
+				{
+					t = plr.center;
+				}
+				else
+				{
+					t = main.grid.randomLand();
+				}
 				if (pathFindTo(org, t.row, t.col) == null)
 				{
 					return;
@@ -167,7 +205,7 @@ public class OrganismSystem extends BaseSystem {
 			return null;
 		return candidates.get((int)(Math.random()*candidates.size()));
 	}
-	
+
 	public void shoot(Entity shooter, Entity target)
 	{
 		int[] damage = main.grid.conflictSystem.fire(shooter, target);
@@ -185,7 +223,7 @@ public class OrganismSystem extends BaseSystem {
 				main.frameCount);
 		//shooter.owner.action--; redundant
 	}
-	
+
 	public ArrayList<Tile> pathFindTo(Organism org, int r, int c)
 	{
 		org.queueTiles = pathfinder.findAdjustedPath(org, org.center.row, org.center.col, r, c);

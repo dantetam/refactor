@@ -180,6 +180,8 @@ public class RenderSystem extends BaseSystem {
 				main.stroke(255,0,0);
 				//main.line(nr1*width,nc1*height,nr2*width,nc2*height);
 				main.line((nr1+0.5F)*width,(nc1+0.5F)*height,(nr2+0.5F)*width,(nc2+0.5F)*height);
+				main.fill(0,0,0);
+				main.rect(((nr1+0.5F) + (nr2-nr1)*frames)*width,((nc1+0.5F) + (nc2-nc1)*frames)*height,5,5);
 				main.rect((nr2+0.5F)*width,(nc2+0.5F)*height,2,2);
 			}
 		}

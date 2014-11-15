@@ -21,7 +21,7 @@ public class Data {
 		temp.addUnit(0, -1, 10, 2, 2, 0);
 		temp.addUnit(1, 0, 10, 2, 2, 0);
 		temp.addUnit(-1, 0, 10, 2, 2, 0);
-		temp.maxAction = 3;
+		temp.maxAction = 1;
 		organisms.put(temp.name, temp);
 		
 		temp = new Organism("Player");
@@ -33,8 +33,8 @@ public class Data {
 		temp.addUnit(0, -1, 15, 4, 4, 0);
 		temp.addUnit(-1, -1, 10, 2, 2, 0);
 		temp.addUnit(-1, 0, 15, 4, 4, 0);
-		temp.addUnit(0, 0, 30, 6, 4, 4).range(5);
-		temp.maxAction = 5;
+		temp.addUnit(0, 0, 30, 6, 4, 6).range(5);
+		temp.maxAction = 1;
 		organisms.put(temp.name, temp);
 	}
 	

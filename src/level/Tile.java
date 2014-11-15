@@ -15,4 +15,9 @@ public class Tile {
 		return row == t.row && col == t.col;
 	}
 	
+	public int dist(Tile t)
+	{
+		return Math.abs(row - t.row) + Math.abs(col - t.col);
+	}
+	
 }

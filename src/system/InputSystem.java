@@ -86,7 +86,7 @@ public class InputSystem extends BaseSystem {
 		{
 			if (clicks.get(0).mode == 0) 
 			{
-				//if (main.menuSystem.highlighted == null) continue;
+				if (main.menuSystem.highlighted == null) continue;
 				Entity candidate = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
 				if (candidate != null)
 				{
@@ -121,6 +121,11 @@ public class InputSystem extends BaseSystem {
 			}
 			else 
 			{
+				if (main.menuSystem.highlighted == null) 
+				{
+					clicks.remove(0);
+					continue;
+				}
 				Entity enemy = main.grid.findEntity(main.menuSystem.highlighted.row, main.menuSystem.highlighted.col);
 				if (enemy != null)
 				{
@@ -137,7 +142,7 @@ public class InputSystem extends BaseSystem {
 						}
 						int dist = enAttack.dist(enemy);
 						int[] damage;
-						System.out.println(enAttack.range);
+						//System.out.println(enAttack.range);
 						if (dist <= 2 && enAttack.range == 0)
 						{
 							damage = main.grid.conflictSystem.attack(enAttack, enemy);
@@ -154,7 +159,7 @@ public class InputSystem extends BaseSystem {
 						}
 						else if (dist <= enAttack.range && enAttack.range > 0)
 						{
-							System.out.println("Ranged");
+							//System.out.println("Ranged");
 							damage = main.grid.conflictSystem.fire(enAttack, enemy);
 						}
 						else
@@ -200,6 +205,10 @@ public class InputSystem extends BaseSystem {
 				}
 			}
 			clicks.remove(0);
+		}
+		if (plr.action <= 0)
+		{
+			main.organismSystem.nextTurn = true;
 		}
 	}
 

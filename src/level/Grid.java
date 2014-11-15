@@ -98,7 +98,7 @@ public class Grid {
 		{
 			for (int j = 0; j < b.size(); j++)
 			{
-				//if (a.get(i) == null || b.get(i) == null) continue;
+				if (a.get(i) == null || b.get(j) == null) return null;
 				if (a.get(i).sameLocation(b.get(j)))
 				{
 					return new Entity[]{a.get(i),b.get(j)};
