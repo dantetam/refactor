@@ -26,13 +26,13 @@ public class InputSystem extends BaseSystem {
 			}
 			else if (key == 'm')
 			{
-				if (main.renderSystem.sight == 15)
+				if (main.renderSystem.sight == 10)
 				{
-					main.renderSystem.sight = 40;
+					main.renderSystem.sight = 30;
 				}
 				else
 				{
-					main.renderSystem.sight = 15;
+					main.renderSystem.sight = 10;
 				}
 			}
 		}

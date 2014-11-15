@@ -7,7 +7,7 @@ import level.Tile;
 
 public class RenderSystem extends BaseSystem {
 
-	public int sight = 15;
+	public int sight = 10;
 
 	public RenderSystem(Main m)
 	{
@@ -45,13 +45,13 @@ public class RenderSystem extends BaseSystem {
 			nc = 0;
 			nr++;
 		}
+		float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,40)/40F;
 		for (int i = 0; i < main.grid.organisms.size(); i++)
 		{
 			Organism org = main.grid.organisms.get(i);
 			for (int j = 0; j < org.units.size(); j++)
 			{
 				Entity unit = org.units.get(j);
-				float frames = (float)Math.min(main.frameCount - main.frameLastUpdate,40)/40F;
 				if (main.organismSystem.records[org.center.row][org.center.col] == null) //The unit recently moved to the spot
 				{
 					main.fill(255,0,0);
@@ -71,6 +71,27 @@ public class RenderSystem extends BaseSystem {
 							);
 				}
 			}
+		}
+		nr = 0; nc = 0; //"Real" iterators to keep track of the row and column on screen
+		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
+		{
+			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)
+			{
+				if (main.grid.getTile(r, c) == null) continue;
+				if (main.organismSystem.records[r][c] != null &&
+						main.grid.findEntity(r, c) == null) //A unit left
+				{
+					main.fill(255,0,0);
+					main.rect(
+							nr*width + width*(frames/2F),
+							nc*height + height*(frames/2F),
+							width*(1-frames),height*(1-frames)
+							);
+				}
+				nc++;
+			}
+			nc = 0;
+			nr++;
 		}
 	}
 

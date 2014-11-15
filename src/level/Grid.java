@@ -3,6 +3,7 @@ package level;
 import java.util.ArrayList;
 
 import data.Data;
+import entity.Entity;
 import entity.Organism;
 
 public class Grid {
@@ -44,6 +45,23 @@ public class Grid {
 		if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length)
 		{
 			return tiles[r][c];
+		}
+		return null;
+	}
+	
+	public Entity findEntity(int r, int c)
+	{
+		for (int i = 0; i < organisms.size(); i++)
+		{
+			Organism org = organisms.get(i);
+			for (int j = 0; j < org.units.size(); j++)
+			{
+				Entity u = org.units.get(j);
+				if (org.center.row + u.rDis == r && org.center.col + u.cDis == c)
+				{
+					return u;
+				}
+			}
 		}
 		return null;
 	}
