@@ -32,6 +32,41 @@ public class DiamondSquare {
 			}
 		}
 	}
+	
+	public static double seaLevel(double[][] terrain, double guess, double desired)
+	{
+		while (true)
+		{
+			float land = 0, sea = 0;
+			for (int r = 0; r < terrain.length; r++)
+			{
+				for (int c = 0; c < terrain[0].length; c++)
+				{
+					if (terrain[r][c] >= guess)
+					{
+						land++;
+					}
+					else
+					{
+						sea++;
+					}
+				}
+			}
+			float p = land/(land+sea);
+			if (Math.abs(p - desired) <= 0.05)
+			{
+				return guess;
+			}
+			if (p > desired) //Too much land
+			{
+				guess += 1;
+			}
+			else //Too much sea
+			{
+				guess -= 1;
+			}
+		}
+	}
 
 	//Creates a table with 4 corners set to argument values
 	public static double[][] makeTable(double topLeft, double topRight, double botLeft, double botRight, int width)
@@ -93,23 +128,12 @@ public class DiamondSquare {
 		if (!forceStay[sX + width/2][sY + width/2])
 			t[sX + width/2][sY + width/2] = (t[sX][sY] + t[sX+width][sY] + t[sX][sY+width] + t[sX+width][sY+width])/4 + 
 					startAmp*(random.nextDouble() - 0.5)*2;
-		/*System.out.println(t[sX][sY]);
-		System.out.println(t[sX+width][sY]);
-		System.out.println(t[sX][sY+width]);
-		System.out.println(t[sX+width][sY+width]);
-		System.out.println("-------");*/
-		//printTable(t);
-		//System.out.println("-------");
 		if (width > 1)
 		{
 			square(sX + width/2, sY, width, startAmp);
 			square(sX, sY + width/2, width, startAmp);
 			square(sX + width, sY + width/2, width, startAmp);
 			square(sX + width/2, sY + width, width, startAmp);
-			//diamond(sX, sY, width/2);
-			//diamond(sX + width/2, sY, width/2);
-			//diamond(sX, sY + width/2, width/2);
-			//diamond(sX + width/2, sY + width/2, width/2);
 		}
 	}
 

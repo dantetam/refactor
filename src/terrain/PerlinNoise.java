@@ -8,7 +8,7 @@ public class PerlinNoise {
 	
 	public static void main(String[] args)
 	{
-		double[][] test = new PerlinNoise(870L).generate(new double[]{32,32,6,8,1,0.8,6,32,55});
+		double[][] test = new PerlinNoise(870L).generate(new double[]{32,32,5.5,8,1,0.8,6,128});
 		for (int r = 0; r < test.length; r++)
 		{
 			for (int c = 0; c < test[0].length; c++)
