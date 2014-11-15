@@ -23,23 +23,30 @@ public class Organism {
 	
 	public Organism(Organism other)
 	{
-		id = System.currentTimeMillis()*(long)Math.random();
+		id = (long)(System.currentTimeMillis()*Math.random());
 		name = other.name;
 		units = new ArrayList<Entity>();
 		queueTiles = new ArrayList<Tile>();
 		for (int i = 0; i < other.units.size(); i++)
 		{
 			Entity en = other.units.get(i);
-			Entity newEn = new Entity(this,en.rDis,en.cDis);
+			Entity newEn = new Entity(this,en.rDis,en.cDis,en.health,en.offensiveStr,en.defensiveStr,en.rangedStr);
 			units.add(newEn);
 		}
 		maxAction = other.maxAction;
 		action = maxAction;
 	}
 	
-	public void addUnit(int rDis, int cDis)
+	public void addUnit(int rDis, int cDis, int h, int o, int d, int r)
 	{
-		units.add(new Entity(this,rDis,cDis));
+		units.add(new Entity(this,rDis,cDis,h,o,d,r));
+	}
+	
+	public void destroy(Entity en)
+	{
+		units.remove(en);
+		en.owner = null;
+		en.health = 0;
 	}
 	
 	public boolean equals(Organism org)

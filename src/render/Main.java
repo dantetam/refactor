@@ -26,7 +26,7 @@ public class Main extends PApplet {
 		Data.init();
 		
 		levelLoader = new LevelLoader(870L);
-		grid = new Grid(levelLoader.newLevel(128));
+		grid = new Grid(levelLoader.newLevel(32));
 		
 		systems.add(renderSystem);
 		systems.add(organismSystem);

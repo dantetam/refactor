@@ -34,6 +34,18 @@ public class OrganismSystem extends BaseSystem {
 
 				org.action = org.maxAction;
 			}
+			for (int i = main.grid.organisms.size() - 1; i >= 0; i--)
+			{
+				Organism org = main.grid.organisms.get(i);
+				for (int j = org.units.size() - 1; j >= 0; j--)
+				{
+					Entity u = org.units.get(j);
+					if (u.deathFlag)
+					{
+						org.units.remove(u);
+					}
+				}
+			}
 		}
 	}
 
@@ -49,7 +61,8 @@ public class OrganismSystem extends BaseSystem {
 				if (org.queueTiles.size() > 0)
 				{
 					Tile t = org.queueTiles.get(org.queueTiles.size()-1);
-					if (main.grid.valid(org, t.row, t.col))
+					Entity[] en = main.grid.valid(org, t.row, t.col); 
+					if (en == null)
 					{
 						main.grid.moveCenterTo(org, t.row, t.col);
 						org.queueTiles.remove(org.queueTiles.size()-1);
@@ -58,6 +71,37 @@ public class OrganismSystem extends BaseSystem {
 					else
 					{
 						System.out.println("Attack");
+						int[] damage = main.grid.conflictSystem.attack(en[0], en[1]);
+						if (en[0].health - damage[1] <= 0 && en[1].health - damage[0] <= 0)
+						{
+							if (en[0].health >= en[1].health)
+							{
+								en[1].deathFlag = true;
+								//en[1].owner.destroy(en[1]);
+								en[0].health -= damage[1];
+							}
+							else
+							{
+								en[0].deathFlag = true;
+								en[1].health -= damage[0];
+							}
+						}
+						else if (en[0].health - damage[1] <= 0)
+						{
+							en[0].deathFlag = true;
+							en[1].health -= damage[0];
+						}
+						else if (en[1].health - damage[0] <= 0)
+						{
+							en[1].deathFlag = true;
+							en[0].health -= damage[1];
+						}
+						else
+						{
+							en[1].health -= damage[0];
+							en[0].health -= damage[1];
+						}
+						org.action--;
 					}
 					continue;
 				}

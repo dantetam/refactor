@@ -16,23 +16,23 @@ public class Data {
 		Organism temp;
 		
 		temp = new Organism("Test");
-		temp.addUnit(0, 0);
-		temp.addUnit(0, 1);
-		temp.addUnit(0, -1);
-		temp.addUnit(1, 0);
-		temp.addUnit(-1, 0);
-		temp.maxAction = 5;
+		temp.addUnit(0, 0, 15, 4, 2, 0);
+		temp.addUnit(0, 1, 10, 2, 2, 0);
+		temp.addUnit(0, -1, 10, 2, 2, 0);
+		temp.addUnit(1, 0, 10, 2, 2, 0);
+		temp.addUnit(-1, 0, 10, 2, 2, 0);
+		temp.maxAction = 3;
 		organisms.put(temp.name, temp);
 		
 		temp = new Organism("Player");
-		temp.addUnit(-1, 1);
-		temp.addUnit(0, 1);
-		temp.addUnit(1, 1);
-		temp.addUnit(1, 0);
-		temp.addUnit(1, -1);
-		temp.addUnit(0, -1);
-		temp.addUnit(-1, -1);
-		temp.addUnit(-1, 0);
+		temp.addUnit(-1, 1, 10, 2, 2, 0);
+		temp.addUnit(0, 1, 15, 4, 4, 0);
+		temp.addUnit(1, 1, 10, 2, 2, 0);
+		temp.addUnit(1, 0, 15, 4, 4, 0);
+		temp.addUnit(1, -1, 10, 2, 2, 0);
+		temp.addUnit(0, -1, 15, 4, 4, 0);
+		temp.addUnit(-1, -1, 10, 2, 2, 0);
+		temp.addUnit(-1, 0, 15, 4, 4, 0);
 		temp.maxAction = 5;
 		organisms.put(temp.name, temp);
 	}

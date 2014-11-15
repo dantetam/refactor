@@ -2,6 +2,7 @@ package level;
 
 import java.util.ArrayList;
 
+import level.ConflictSystem;
 import data.Data;
 import entity.Entity;
 import entity.Organism;
@@ -11,6 +12,8 @@ public class Grid {
 	private Tile[][] tiles;
 	public ArrayList<Organism> organisms;
 
+	public ConflictSystem conflictSystem;
+	
 	public Grid(int[][] terrain)
 	{
 		tiles = new Tile[terrain.length][terrain[0].length];
@@ -31,64 +34,69 @@ public class Grid {
 		Tile t = randomLand();
 		moveCenterTo(plr, t.row, t.col);
 
-		for (int i = 1; i < 10; i++)
+		for (int i = 1; i < 15; i++)
 		{
 			Organism org = Data.getOrganism("Test");
 			organisms.add(org);
 			t = randomLand();
 			moveCenterTo(org, t.row, t.col);
 		}
+		
+		conflictSystem = new ConflictSystem(this);
 	}
 
-	public boolean valid(Organism a, int r, int c)
+	public Entity[] valid(Organism a, int r, int c)
 	{
 		for (int i = 0; i < organisms.size(); i++)
 		{
 			Organism b = organisms.get(i);
+			//System.out.println(a.id + " " + b.id);
 			if (!a.equals(b))
 			{
-				if (intersectInFuture(a,b,r,c))
-				{
-					return false;
-				}
+				Entity[] possible = intersectInFuture(a,b,r,c);
+				if (possible != null)
+					return possible;
 			}
 		}
-		return true;
+		return null;
 	}
 	
 	//Checks to see if a hypothetical move by organism a would intersect organism b's territory
-	private boolean intersectInFuture(Organism a, Organism b, int r, int c)
+	private Entity[] intersectInFuture(Organism a, Organism b, int r, int c)
 	{
-		ArrayList<Tile> aFuture = new ArrayList<Tile>();
-		ArrayList<Tile> bFuture = new ArrayList<Tile>();
+		ArrayList<Entity> aFuture = new ArrayList<Entity>();
+		ArrayList<Entity> bFuture = new ArrayList<Entity>();
 		for (int i = 0; i < a.units.size(); i++)
 		{
 			Entity u = a.units.get(i);
-			aFuture.add(getTile(r+u.rDis,c+u.cDis));
+			//aFuture.add(getTile(r+u.rDis,c+u.cDis));
+			aFuture.add(u);
 		}
 		for (int i = 0; i < b.units.size(); i++)
 		{
-			Entity u = a.units.get(i);
-			aFuture.add(getTile(b.center.row+u.rDis,b.center.col+u.cDis));
+			Entity u = b.units.get(i);
+			//aFuture.add(getTile(b.center.row+u.rDis,b.center.col+u.cDis));
+			bFuture.add(u);
 		}
 		return intersect(aFuture, bFuture);
 	}
 	
 	//Checks to see if two lists have an intersection
-	private boolean intersect(ArrayList<Tile> a, ArrayList<Tile> b)
+	private Entity[] intersect(ArrayList<Entity> a, ArrayList<Entity> b)
 	{
 		for (int i = a.size() - 1; i >= 0; i--)
 		{
 			for (int j = 0; j < b.size(); j++)
 			{
-				if (a.get(i).equals(b.get(j)))
+				//if (a.get(i) == null || b.get(i) == null) continue;
+				if (a.get(i).sameLocation(b.get(j)))
 				{
-					return true;
+					return new Entity[]{a.get(i),b.get(j)};
 				}
 			}
 			//a.remove(i);
 		}
-		return false;
+		return null;
 	}
 	
 	public Tile getTile(int r, int c)
