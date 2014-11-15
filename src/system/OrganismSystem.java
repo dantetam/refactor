@@ -163,6 +163,13 @@ public class OrganismSystem extends BaseSystem {
 									main.grid.getTile(en[1].owner.center.row + en[1].rDis,en[1].owner.center.col + en[1].cDis),
 									main.frameCount);*/
 						}
+						else //Implying death
+						{
+							if (en[1].owner.name.equals("Player"))
+							{
+								en[1].owner.kills++;
+							}
+						}
 						org.action--;
 					}
 					continue;

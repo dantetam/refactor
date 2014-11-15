@@ -184,7 +184,7 @@ public class RenderSystem extends BaseSystem {
 		{
 			AttackArrow ar = arrows.get(i);
 			if (main.frameCount - ar.frameCreated > 40) continue;
-			if (plr.center == null || ar.a == null) continue;
+			if (plr.center == null || ar.a == null || ar.d == null) continue;
 			int nr1 = ar.a.row - plr.center.row + sight;
 			int nc1 = ar.a.col - plr.center.col + sight;
 			int nr2 = ar.d.row - plr.center.row + sight;

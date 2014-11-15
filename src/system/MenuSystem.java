@@ -1,6 +1,7 @@
 package system;
 
 import entity.Entity;
+import entity.Organism;
 import level.Tile;
 import render.Main;
 
@@ -16,13 +17,15 @@ public class MenuSystem extends BaseSystem {
 
 	public void tick()
 	{
+		Organism plr = main.grid.organisms.get(0);
 		main.noStroke();
 		main.fill(0);
 		main.rect(0,0,400,100);
 		main.textAlign(main.LEFT, main.CENTER);
 		main.fill(255);
-		main.text("Action: " + main.grid.organisms.get(0).action, 25, 50);
-
+		main.text("Action: " + plr.action + "/" + plr.maxAction, 25, 40);
+		main.text("Kills: " + plr.kills, 25, 55);
+		
 		if (selected != null)
 		{
 			main.fill(0);

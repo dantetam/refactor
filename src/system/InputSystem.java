@@ -6,6 +6,8 @@ import level.Tile;
 import entity.Entity;
 import entity.Organism;
 import render.Main;
+import level.Grid;
+import level.LevelLoader;
 
 public class InputSystem extends BaseSystem {
 
@@ -27,7 +29,8 @@ public class InputSystem extends BaseSystem {
 			if (key == (char)32)
 			{
 				//System.out.println("Space");
-				main.organismSystem.nextTurn = true;
+				if (main.frameCount - main.frameLastUpdate > main.renderSystem.debounce)
+					main.organismSystem.nextTurn = true;
 			}
 			else if (key == 'm')
 			{
@@ -38,6 +41,24 @@ public class InputSystem extends BaseSystem {
 				else
 				{
 					main.renderSystem.sight = 10;
+				}
+			}
+			else if (key == 'r')
+			{
+				Organism plr = main.grid.organisms.get(0);
+				if (plr.kills >= 10*main.timesRefactored)
+				{
+					plr.kills -= 10*main.timesRefactored;
+					main.grid = new Grid(new LevelLoader(System.currentTimeMillis()*(long)Math.random()).newLevel(128));
+					main.organismSystem.addGrid(main.grid);
+					main.grid.organisms.remove(0);
+					main.grid.organisms.add(0,plr);
+					plr.addUnitExtension((int)(Math.random()*10 + 10), 
+							(int)(Math.random()*main.timesRefactored + 4),
+							(int)(Math.random()*main.timesRefactored + 4), 
+							0);
+					Tile t = main.grid.randomLand();
+					main.grid.moveCenterTo(plr, t.row, t.col);
 				}
 			}
 			else if (key == 'd')
@@ -200,6 +221,10 @@ public class InputSystem extends BaseSystem {
 									main.grid.getTile(enAttack.owner.center.row + enAttack.rDis,enAttack.owner.center.col + enAttack.cDis),
 									main.grid.getTile(enemy.owner.center.row + enemy.rDis,enemy.owner.center.col + enemy.cDis),
 									main.frameCount);*/
+						}
+						else
+						{
+							plr.kills++;
 						}
 						plr.action--;
 					}

@@ -19,7 +19,7 @@ public class Main extends PApplet {
 	public RenderSystem renderSystem = new RenderSystem(this);
 	public MenuSystem menuSystem = new MenuSystem(this);
 	
-	public int frameLastUpdate = 0;
+	public int frameLastUpdate = 0, timesRefactored = 0;
 	
 	public void setup()
 	{
