@@ -8,7 +8,7 @@ import level.Tile;
 public class RenderSystem extends BaseSystem {
 
 	public int sight = 10;
-	
+
 	public RenderSystem(Main m)
 	{
 		super(m);
@@ -17,12 +17,15 @@ public class RenderSystem extends BaseSystem {
 	public void tick()
 	{
 		main.background(255);
-		float width = main.width/main.grid.rows(), height = main.height/main.grid.cols();
-		for (int r = 0; r < main.grid.rows(); r++)
+		float width = main.width/(sight*2 + 1), height = main.height/(sight*2 + 1);
+		Organism plr = main.grid.organisms.get(0);
+		int nr = 0, nc = 0; //"Real" iterators to keep track of the row and column on screen
+		for (int r = plr.center.row - sight; r <= plr.center.row + sight; r++)
 		{
-			for (int c = 0; c < main.grid.cols(); c++)
+			for (int c = plr.center.col - sight; c <= plr.center.col + sight; c++)
 			{
 				Tile t = main.grid.getTile(r,c);
+				if (t == null) continue;
 				main.stroke(255);
 				switch (t.biome)
 				{
@@ -36,8 +39,11 @@ public class RenderSystem extends BaseSystem {
 				case 6: main.fill(51,25,0); break;
 				default: main.fill(255,0,0); break;
 				}
-				main.rect(r*width,c*height,width,height);
+				main.rect(nr*width,nc*height,width,height);
+				nc++;
 			}
+			nc = 0;
+			nr++;
 		}
 		for (int i = 0; i < main.grid.organisms.size(); i++)
 		{
@@ -47,8 +53,9 @@ public class RenderSystem extends BaseSystem {
 				Entity unit = org.units.get(j);
 				main.fill(255,0,0);
 				main.rect(
-						(org.center.row + unit.rDis)*width,
-						(org.center.col + unit.cDis)*height,width,height);
+						(org.center.row + unit.rDis - plr.center.row + sight)*width,
+						(org.center.col + unit.cDis - plr.center.col + sight)*height,width,height
+						);
 			}
 		}
 	}
