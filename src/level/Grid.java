@@ -37,7 +37,7 @@ public class Grid {
 		Tile t = randomLand();
 		moveCenterTo(plr, t.row, t.col);
 		
-		for (int i = 1; i < 50; i++)
+		for (int i = 1; i < 30; i++)
 		{
 			Organism org = Data.randomOrganism();
 			organisms.add(org);
@@ -52,7 +52,7 @@ public class Grid {
 				}
 			}
 		}
-		/*for (int i = 1; i < 50; i++)
+		for (int i = 1; i < 20; i++)
 		{
 			Organism org = Data.getOrganism("Test");
 			organisms.add(org);
@@ -67,6 +67,7 @@ public class Grid {
 				}
 			}
 		}
+		/*
 		for (int i = 1; i < 10; i++)
 		{
 			Organism org = Data.getOrganism("Spider");

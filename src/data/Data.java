@@ -17,7 +17,7 @@ public class Data {
 		Organism temp;
 		
 		temp = new Organism("Test");
-		temp.color(150,150,150);
+		temp.color(0,0,0);
 		temp.addUnit(0, 0, 15, 4, 2, 2).range(5);
 		temp.addUnit(0, 1, 10, 2, 2, 0);
 		temp.addUnit(0, -1, 10, 2, 2, 0);

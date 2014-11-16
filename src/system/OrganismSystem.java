@@ -219,7 +219,7 @@ public class OrganismSystem extends BaseSystem {
 			{
 				if (respHealth.get(u) <= u.health)
 				{
-					u.health += 0.5;
+					//u.health += 0.5;
 					if (u.health > u.maxHealth) u.health = u.maxHealth;
 				}
 			}
@@ -269,7 +269,7 @@ public class OrganismSystem extends BaseSystem {
 		org.queueTiles = pathfinder.findAdjustedPath(org, org.center.row, org.center.col, r, c);
 		return org.queueTiles;
 	}
-
+	
 	public void addGrid(Grid grid)
 	{
 		records = new Organism[grid.rows()][grid.cols()];
@@ -300,3 +300,8 @@ public class OrganismSystem extends BaseSystem {
 	}
 
 }
+
+
+
+
+

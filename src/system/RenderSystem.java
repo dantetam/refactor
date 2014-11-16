@@ -287,14 +287,17 @@ public class RenderSystem extends BaseSystem {
 	{
 		PImage temp = main.createImage(w,h,main.ARGB);
 		main.pushStyle();
-		float maxVari = 10; int spacing = 2;
+		float maxVari = 15; int spacing = 2;
+		all:
 		for (int r = 0; r < w; r += spacing)
+		{
 			for (int c = 0; c < h; c += spacing)
 			{
 				for (int nr = r; nr < r + spacing; nr++)
 				{
 					for (int nc = c; nc < c + spacing; nc++)
 					{
+						if (nr*w + nc >= temp.pixels.length) break all;
 						temp.pixels[nr*w + nc] = main.color(
 								red + (float)(maxVari*2*Math.random()) - maxVari,
 								green + (float)(maxVari*2*Math.random()) - maxVari,
@@ -303,6 +306,7 @@ public class RenderSystem extends BaseSystem {
 					}
 				}
 			}
+		}
 		temp.updatePixels();
 		main.popStyle();
 		return temp;
